@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint:eslint": "next lint",
+    "lint:prettier": "prettier --check './**/*.{js,jsx,ts,tsx,json}'",
+    "lint-fix:eslint": "npm run lint:eslint -- --fix",
+    "lint-fix:prettier": "prettier --write './**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
     "@types/node": "20.5.8",
