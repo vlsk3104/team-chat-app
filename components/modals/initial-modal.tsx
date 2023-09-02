@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import FileUpload from '../file-upload'
 import { Button } from '../ui/button'
 import {
   Dialog,
@@ -75,15 +76,30 @@ const InitialModal = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-8 px-6">
               <div className="flex items-center justify-center text-center">
-                TODO: Image Upload
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <FileUpload
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-rose-400" />
+                    </FormItem>
+                  )}
+                />
               </div>
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                      チャットルーム 名前
+                    <FormLabel className="ml-1 text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                      名前
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -93,7 +109,7 @@ const InitialModal = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="ml-1 text-rose-400" />
                   </FormItem>
                 )}
               />
