@@ -1,9 +1,18 @@
 import './globals.css'
-import { Open_Sans } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs'
+import { Noto_Sans_JP } from 'next/font/google'
+
+import { ThemeProvider } from '@/components/providers/theme-provider'
+
+import { cn } from '@/lib/utils'
 
 import type { Metadata } from 'next'
 
-const font = Open_Sans({ subsets: ['latin'] })
+const font = Noto_Sans_JP({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Team Chat',
@@ -16,8 +25,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja">
-      <body className={font.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="ja" suppressHydrationWarning>
+        <body className={cn(font.className, 'bg-white dark:bg-[#313338]')}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+            storageKey="discord-theme"
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
