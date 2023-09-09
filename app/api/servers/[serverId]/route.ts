@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NextResponse } from 'next/server'
-import { v4 as uuidv4 } from 'uuid'
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -10,6 +10,7 @@ export async function PATCH(
 ) {
   try {
     const profile = await currentProfile()
+    const { name, imageUrl } = await req.json()
 
     if (!profile) {
       return new NextResponse('Unauthorized', { status: 401 })
@@ -25,13 +26,14 @@ export async function PATCH(
         profileId: profile.id,
       },
       data: {
-        inviteCode: uuidv4(),
+        name,
+        imageUrl,
       },
     })
 
     return NextResponse.json(server)
   } catch (error) {
-    console.log('server-id-invite-code', error)
+    console.log('server-id', error)
     return new NextResponse('Internal Error', { status: 500 })
   }
 }
