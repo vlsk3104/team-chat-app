@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { redirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import React from 'react'
@@ -18,7 +17,7 @@ const SeverIdLayout = async ({
   const profile = await currentProfile()
 
   if (!profile) {
-    return redirectToSignIn()
+    return void redirectToSignIn()
   }
 
   const server = await db.server.findUnique({
