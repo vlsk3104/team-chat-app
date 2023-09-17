@@ -14,7 +14,7 @@ const SocketIndicator = () => {
         variant={'outline'}
         className="border-none bg-yellow-600 text-white"
       >
-        1秒ごとにポーリングで接続します
+        ...接続中
       </Badge>
     )
   }
@@ -24,7 +24,7 @@ const SocketIndicator = () => {
       variant={'outline'}
       className="border-none bg-emerald-600 text-white"
     >
-      ライブ：リアルタイム更新
+      ライブ：リアルタイム
     </Badge>
   )
 }
