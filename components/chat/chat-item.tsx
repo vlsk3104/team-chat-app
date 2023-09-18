@@ -7,12 +7,12 @@ import { Member, MemberRole, Profile } from '@prisma/client'
 import axios from 'axios'
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { useModal } from '@/hooks/use-modal-store'
 import { cn } from '@/lib/utils'
 
 import ActionTooltip from '../action-tooltip'
@@ -64,9 +64,8 @@ const ChatItem = ({
   socketUrl,
   socketQuery,
 }: ChatItemProps) => {
-  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const { onOpen } = useModal()
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -231,7 +230,12 @@ const ChatItem = ({
           )}
           <ActionTooltip label="削除">
             <Trash
-              onClick={() => setIsDeleting(true)}
+              onClick={() =>
+                onOpen('deleteMessage', {
+                  apiUrl: `${socketUrl}/${id}`,
+                  query: socketQuery,
+                })
+              }
               className="ml-auto h-4 w-4 cursor-pointer text-zinc-500 transition hover:text-zinc-600 dark:hover:text-zinc-300"
             />
           </ActionTooltip>

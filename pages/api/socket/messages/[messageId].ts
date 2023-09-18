@@ -7,15 +7,18 @@ import { currentProfilePages } from '@/lib/current-profile-pages'
 import { db } from '@/lib/db'
 import { NextApiResponseServerIo } from '@/types'
 
-const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
-  if (req.method !== 'PATCH' && req.method !== 'DELETE') {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponseServerIo,
+) {
+  if (req.method !== 'DELETE' && req.method !== 'PATCH') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
   try {
     const profile = await currentProfilePages(req)
-    const { content } = req.body
     const { messageId, serverId, channelId } = req.query
+    const { content } = req.body
 
     if (!profile) {
       return res.status(401).json({ error: 'Unauthorized' })
@@ -27,10 +30,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
 
     if (!channelId) {
       return res.status(400).json({ error: 'Channel ID missing' })
-    }
-
-    if (!content) {
-      return res.status(400).json({ error: 'Content missing' })
     }
 
     const server = await db.server.findFirst({
@@ -48,18 +47,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
     })
 
     if (!server) {
-      return res.status(404).json({ message: 'Server not found' })
+      return res.status(404).json({ error: 'Server not found' })
     }
 
     const channel = await db.channel.findFirst({
       where: {
         id: channelId as string,
-        serverId: server.id,
+        serverId: serverId as string,
       },
     })
 
     if (!channel) {
-      return res.status(404).json({ message: 'Channel not found' })
+      return res.status(404).json({ error: 'Channel not found' })
     }
 
     const member = server.members.find(
@@ -67,7 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
     )
 
     if (!member) {
-      return res.status(404).json({ message: 'Member not found' })
+      return res.status(404).json({ error: 'Member not found' })
     }
 
     let message = await db.message.findFirst({
@@ -85,7 +84,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
     })
 
     if (!message || message.deleted) {
-      return res.status(404).json({ message: 'Message not found' })
+      return res.status(404).json({ error: 'Message not found' })
     }
 
     const isMessageOwner = message.memberId === member.id
@@ -104,7 +103,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         },
         data: {
           fileUrl: null,
-          content: '削除済み',
+          content: 'メッセージ削除済み',
           deleted: true,
         },
         include: {
@@ -139,7 +138,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
       })
     }
 
-    const updateKey = `chat:${channel.id}:messages:update`
+    const updateKey = `chat:${channelId as string}:messages:update`
 
     res?.socket?.server?.io?.emit(updateKey, message)
 
@@ -149,5 +148,3 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
     return res.status(500).json({ error: 'Internal Error' })
   }
 }
-
-export default handler
