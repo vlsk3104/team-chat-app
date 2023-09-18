@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { redirectToSignIn } from '@clerk/nextjs'
+import { RedirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
@@ -21,7 +21,7 @@ const MemberIdPage = async ({ params }: MemberIdPageProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    return void redirectToSignIn()
+    return <RedirectToSignIn />
   }
 
   const currentMember = await db.member.findFirst({

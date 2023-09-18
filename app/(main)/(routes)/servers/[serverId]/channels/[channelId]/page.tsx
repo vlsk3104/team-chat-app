@@ -1,8 +1,10 @@
-import { redirectToSignIn } from '@clerk/nextjs'
+import { RedirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
 import ChatHeader from '@/components/chat/chat-header'
+import ChatInput from '@/components/chat/chat-input'
+import ChatMessage from '@/components/chat/chat-message'
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -18,7 +20,7 @@ const ChannelIdPage = async ({ params }: channelIdPageProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    return void redirectToSignIn()
+    return <RedirectToSignIn />
   }
 
   const channel = await db.channel.findUnique({
@@ -44,6 +46,29 @@ const ChannelIdPage = async ({ params }: channelIdPageProps) => {
         name={channel.name}
         serverId={channel.serverId}
         type="channel"
+      />
+      <ChatMessage
+        member={member}
+        name={channel.name}
+        chatId={channel.id}
+        type="channel"
+        apiUrl="/api/messages"
+        socketUrl="/api/socket/messages"
+        socketQuery={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+        paramKey="channelId"
+        paramValue={channel.id}
+      />
+      <ChatInput
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/socket/messages"
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
       />
     </div>
   )
