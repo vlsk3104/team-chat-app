@@ -1,4 +1,4 @@
-import { redirectToSignIn } from '@clerk/nextjs'
+import { RedirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
@@ -20,7 +20,7 @@ const ChannelIdPage = async ({ params }: channelIdPageProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    return void redirectToSignIn()
+    return <RedirectToSignIn />
   }
 
   const channel = await db.channel.findUnique({
@@ -53,7 +53,7 @@ const ChannelIdPage = async ({ params }: channelIdPageProps) => {
         chatId={channel.id}
         type="channel"
         apiUrl="/api/messages"
-        socketUrl="api/socket/messages"
+        socketUrl="/api/socket/messages"
         socketQuery={{
           channelId: channel.id,
           serverId: channel.serverId,

@@ -1,4 +1,5 @@
-import { redirectToSignIn } from '@clerk/nextjs'
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { RedirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
 import { currentProfile } from '@/lib/current-profile'
@@ -14,7 +15,7 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    return void redirectToSignIn()
+    return <RedirectToSignIn />
   }
 
   if (!params.inviteCode) {
