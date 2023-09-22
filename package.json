@@ -12,6 +12,7 @@
     "lint-fix:prettier": "prettier --write './**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
+    "@clerk/localizations": "^1.26.0",
     "@clerk/nextjs": "^4.23.3",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
