@@ -7,12 +7,13 @@ import { Member, MemberRole, Profile } from '@prisma/client'
 import axios from 'axios'
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import qs from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { useModal } from '@/hooks/use-modal-store'
 import { cn } from '@/lib/utils'
 
 import ActionTooltip from '../action-tooltip'
@@ -64,9 +65,20 @@ const ChatItem = ({
   socketUrl,
   socketQuery,
 }: ChatItemProps) => {
-  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const { onOpen } = useModal()
+  const params = useParams()
+  const router = useRouter()
+
+  const onMemberClick = () => {
+    if (member.id === currentMember.id) {
+      return
+    }
+
+    router.push(
+      `/servers/${params?.serverId as string}/conversations/${member.id}`,
+    )
+  }
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -123,13 +135,19 @@ const ChatItem = ({
   return (
     <div className="group relative flex w-full items-center p-4 transition hover:bg-black/5">
       <div className="group flex w-full items-start gap-x-2">
-        <div className="cursor-pointer transition hover:drop-shadow-md">
+        <div
+          onClick={onMemberClick}
+          className="cursor-pointer transition hover:drop-shadow-md"
+        >
           <UserAvatar src={member.profile.imageUrl} />
         </div>
         <div className="flex w-full flex-col">
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
-              <p className="cursor-pointer text-sm font-semibold hover:underline">
+              <p
+                onClick={onMemberClick}
+                className="cursor-pointer text-sm font-semibold hover:underline"
+              >
                 {member.profile.name}
               </p>
               <ActionTooltip label={roleMap[member.role]}>
@@ -231,7 +249,12 @@ const ChatItem = ({
           )}
           <ActionTooltip label="削除">
             <Trash
-              onClick={() => setIsDeleting(true)}
+              onClick={() =>
+                onOpen('deleteMessage', {
+                  apiUrl: `${socketUrl}/${id}`,
+                  query: socketQuery,
+                })
+              }
               className="ml-auto h-4 w-4 cursor-pointer text-zinc-500 transition hover:text-zinc-600 dark:hover:text-zinc-300"
             />
           </ActionTooltip>
