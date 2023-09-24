@@ -4,7 +4,7 @@ import React from 'react'
 
 import ChatHeader from '@/components/chat/chat-header'
 import ChatInput from '@/components/chat/chat-input'
-import ChatMessage from '@/components/chat/chat-message'
+import ChatMessages from '@/components/chat/chat-messages'
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -47,7 +47,7 @@ const ChannelIdPage = async ({ params }: channelIdPageProps) => {
         serverId={channel.serverId}
         type="channel"
       />
-      <ChatMessage
+      <ChatMessages
         member={member}
         name={channel.name}
         chatId={channel.id}
