@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 'use client'
@@ -7,15 +8,15 @@ import { Loader2, ServerCrash } from 'lucide-react'
 import React, { ElementRef, Fragment, useRef } from 'react'
 
 import { useChatQuery } from '@/hooks/use-chat-query'
+import { useChatScroll } from '@/hooks/use-chat-scroll'
 import { useChatSocket } from '@/hooks/use-chat-socket'
 
 import ChatItem from './chat-item'
 import ChatWelcome from './chat-welcome'
-import { useChatScroll } from '@/hooks/use-chat-scroll'
 
 const DATE_FORMAT = 'd MM yyyy, HH:mm'
 
-interface ChatMessageProps {
+interface ChatMessagesProps {
   name: string
   member: Member
   chatId: string
@@ -33,7 +34,7 @@ type MessageWithMemberWithProfile = Message & {
   }
 }
 
-const ChatMessage = ({
+const ChatMessages = ({
   name,
   member,
   chatId,
@@ -43,7 +44,7 @@ const ChatMessage = ({
   paramKey,
   paramValue,
   type,
-}: ChatMessageProps) => {
+}: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`
   const addKey = `chat:${chatId}:messages`
   const updateKey = `chat:${chatId}:messages:update`
@@ -128,4 +129,4 @@ const ChatMessage = ({
   )
 }
 
-export default ChatMessage
+export default ChatMessages
