@@ -167,7 +167,7 @@ const MembersModal = () => {
                           onClick={() => void onKick(member.id)}
                         >
                           <Gavel className="mr-2 h-4 w-4" />
-                          権限の取り下げ
+                          メンバーから削除する
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
