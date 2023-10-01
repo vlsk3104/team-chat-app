@@ -14,8 +14,6 @@
   "dependencies": {
     "@clerk/localizations": "^1.26.0",
     "@clerk/nextjs": "^4.23.3",
-    "@emoji-mart/data": "^1.1.2",
-    "@emoji-mart/react": "^1.1.1",
     "@hookform/resolvers": "^3.3.1",
     "@livekit/components-react": "^1.2.2",
     "@livekit/components-styles": "^1.0.6",
@@ -43,6 +41,7 @@
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "emoji-mart": "^5.5.2",
+    "emoji-picker-react": "^4.5.2",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.12",
     "http": "^0.0.1-security",
