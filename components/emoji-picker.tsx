@@ -2,12 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
+import React from 'react'
 import { Smile } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import React from 'react'
-
+import Picker, { Theme } from 'emoji-picker-react'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 interface EmojiPickerProps {
@@ -16,6 +14,17 @@ interface EmojiPickerProps {
 
 const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme()
+
+  const mapTheme = (theme: string): Theme => {
+    switch (theme) {
+      case 'dark':
+        return Theme.DARK
+      case 'light':
+        return Theme.LIGHT
+      default:
+        return Theme.AUTO
+    }
+  }
 
   return (
     <Popover>
@@ -28,9 +37,8 @@ const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
         className="mb-16 border-none bg-transparent shadow-none drop-shadow-none"
       >
         <Picker
-          theme={resolvedTheme}
-          data={data}
-          onEmojiSelect={(emoji: any) => onChange(emoji.native)}
+          theme={mapTheme(resolvedTheme!)}
+          onEmojiClick={(emojiObject: any) => onChange(emojiObject.emoji)}
         />
       </PopoverContent>
     </Popover>
