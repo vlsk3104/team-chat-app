@@ -12,7 +12,7 @@ interface EmojiPickerProps {
   onChange: (value: string) => void
 }
 
-const CustomEmojiPicker = ({ onChange }: EmojiPickerProps) => {
+const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme()
 
   const mapTheme = (theme: string): Theme => {
@@ -45,4 +45,4 @@ const CustomEmojiPicker = ({ onChange }: EmojiPickerProps) => {
   )
 }
 
-export default CustomEmojiPicker
+export default EmojiPicker
